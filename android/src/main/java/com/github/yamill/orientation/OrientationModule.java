@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.util.Log;
 
 import com.facebook.common.logging.FLog;
@@ -151,9 +152,8 @@ public class OrientationModule extends ReactContextBaseJavaModule implements Lif
             return;
         }
 
-        if (Build.VERSION.SDK_INT >= 34 && context.getApplicationInfo().targetSdkVersion >= 34) {
-            context.registerReceiver(
-                    receiver, filter, exported ? Context.RECEIVER_EXPORTED : Context.RECEIVER_NOT_EXPORTED);
+        if (Build.VERSION.SDK_INT >= 34 && getReactApplicationContext().getApplicationInfo().targetSdkVersion >= 34) {
+            activity.registerReceiver(receiver, new IntentFilter("onConfigurationChanged"), Context.RECEIVER_EXPORTED);
         } else {
             activity.registerReceiver(receiver, new IntentFilter("onConfigurationChanged"));
         }
